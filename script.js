@@ -11,6 +11,10 @@ buttonsArray.forEach(button => {
     button.addEventListener('click', (event) => {
         let val = event.target.innerHTML;
         if (val == '=') {
+            if (string.startsWith("sqrt")) {
+                let num = string.substring(4);
+                string = findSquareRoot(num);
+            }
             string = eval(string);
         }
         else if (val == 'CE') {
@@ -26,3 +30,8 @@ buttonsArray.forEach(button => {
         document.querySelector('input').value = string;
     });
 });
+
+
+function findSquareRoot(num) {
+    return Math.sqrt(num);
+}
