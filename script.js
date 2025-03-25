@@ -1,7 +1,8 @@
 let string = "";
+let ans = 0;
 
 // Select multiple button elements with the same class
-const buttons = document.querySelectorAll('.button');
+const buttons = document.querySelectorAll('.btn');
 
 // Convert NodeList to an array (optional, NodeList is iterable)
 const buttonsArray = Array.from(buttons);
@@ -9,13 +10,14 @@ const buttonsArray = Array.from(buttons);
 // Add event listener to each button
 buttonsArray.forEach(button => {
     button.addEventListener('click', (event) => {
+
         let val = event.target.innerHTML;
-        if (val == '=') {
+        if (val == "ans") {
             if (string.startsWith("sqrt")) {
                 let num = string.substring(4);
                 string = findSquareRoot(num);
             }
-            string = eval(string);
+            ans = eval(string);
         }
         else if (val == 'CE') {
             string = string.substr(0, string.length - 1);
@@ -27,7 +29,8 @@ buttonsArray.forEach(button => {
             string = string + val;
         }
 
-        document.querySelector('input').value = string;
+        document.querySelector('.input').value = string;
+        document.querySelector('.answer').innerText = ans;
     });
 });
 
