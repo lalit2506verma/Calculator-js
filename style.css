@@ -47,6 +47,14 @@ html, body {
     flex-direction: row-reverse;
 }
 
+.answer-box .equal-sign{
+    visibility: hidden;
+    opacity: 0;
+    color: white;
+    font-size: 27px;
+    margin-right: 40px;
+}
+
 .answer-box .answer{
     color: white;
     font-size: 27px;
