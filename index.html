@@ -10,39 +10,143 @@
 <body>
 
     <H1 class="text-center"> Calculator </H1>
-    <div class="container flex flex-col items-center mx-auto">
-        <div class="row">
-            <input class="input" type="text" placeholder="input-field"/> 
-        </div>
-        <div class="row">
-            <button class="button">7</button>
-            <button class="button">8</button>
-            <button class="button">9</button>
-            <button class="button">/</button>
-            <button class="button">sqrt</button>
-        </div>
+    <div class="container flex flex-col items-center">
+        <div class="container-box border ">
 
-        <div class="row"> 
-            <button class="button">4</button>
-            <button class="button">5</button>
-            <button class="button">6</button>
-            <button class="button">*</button>
-            <button class="button">%</button>
-        </div>
+            <div class="input-box bg-black border">
 
-        <div class="row">
-            <button class="button">1</button>
-            <button class="button">2</button>
-            <button class="button">3</button>
-            <button class="button">-</button>
-            <button class="button">+</button>
-        </div>
-        <div class="row">
-            <button class="button">0</button>
-            <button class="button">.</button>
-            <button class="button">CE</button>
-            <button class="button">C</button>
-            <button class="button">=</button>
+                <div class="input">0</div>
+
+            </div>
+
+            <!-- Input screen div container  -->
+            <div class="input-container flex">
+
+                <div class="answer-box bg-black">
+
+                    <div class="answer center"></div>  
+
+                    <div class="equal-sign bg-black center">=</div>
+
+                </div>
+
+            </div>
+
+            <!-- Num Pad -->
+            <div class="keypad-container border">
+
+                <!-- First Row -->
+                <div class="row flex">
+
+                    <div class="function-row">
+
+                        <button class="btn" type="button" value="open-parenthesis">(</button>
+                        <button class="btn" type="button" value="close-parenthesis">)</button>
+                        <button class="btn" type="button" value="pi"> &pi; </button>
+
+                    </div>
+
+                    <div class="numpad-row">
+
+                        <button class="btn nums-key" type="button" value="7"> 7 </button>
+                        <button class="btn nums-key" type="button" value="8"> 8 </button>
+                        <button class="btn nums-key" type="button" value="9"> 9 </button>
+
+                    </div>
+
+                    <div class="arthematic-row">
+
+                        <button class="btn" type="button" value="division"> / </button>
+                        <button class="btn" type="button" value="multiplication"> * </button>
+
+                    </div>
+                </div>
+                
+                <!-- Second Row -->
+                <div class="row flex ">
+
+                    <div class="function-row">
+
+                        <button class="btn" type="button" value="square-root"> sqrt </button>
+                        <button class="btn" type="button" value="log"> log </button>
+                        <button class="btn" type="button" value="ln"> ln </button>
+
+                    </div>
+
+                    <div class="numpad-row">
+                        <button class="btn nums-key" type="button" value="4"> 4 </button>
+                        <button class="btn nums-key" type="button" value="5"> 5 </button>
+                        <button class="btn nums-key" type="button" value="6"> 6 </button>
+                    </div>
+
+                    <div class="arthematic-row">
+
+                        <button class="btn" type="button" value="addition"> + </button>
+                        <button class="btn" type="button" value="subtraction"> - </button>
+
+                    </div>
+                </div>
+
+                <!-- Third Row  -->
+                <div class="row flex ">
+
+                    <div class="function-row">
+                        <button class="btn" type="button" value="sin"> sin </button>
+                        <button class="btn" type="button" value="cos"> cos </button>
+                        <button class="btn" type="button" value="tan"> tan </button>
+
+                    </div>
+
+                    <div class="numpad-row">
+                        <button class="btn nums-key" type="button" value="3"> 3 </button>
+                        <button class="btn nums-key" type="button" value="2"> 2 </button>
+                        <button class="btn nums-key" type="button" value="1"> 1 </button>
+                    </div>
+
+                    <div class="arthematic-row">
+
+                        <button class="btn" type="button" value="percent"> % </button>
+                        <button class="btn" type="button" value="factorial"> ! </button>
+
+                    </div>
+                </div>
+
+                <!-- Fourth Row  -->
+                <div class="row flex ">
+
+                    <div class="function-row">
+                        <button class="btn" type="button" value="tan"> e </button>
+                        <button class="btn" type="button" value="square"> x<sup>2</sup> </button>
+                        <button class="btn" type="button" value="power"> x<sup>y</sup> </button>
+
+                    </div>
+
+                    <div class="numpad-row">
+                        <button class="btn nums-key" type="button" value="0"> 0 </button>
+                        <button class="btn" type="button" value="comma"> . </button>
+                        <button class="btn" type="button" value="calculate"> ans </button>
+                    </div>
+
+                    <div class="arthematic-row">
+
+                        <button class="btn" type="button" value="delete"> C </button>
+                        <button class="btn" type="button" value="clear"> CE </button>
+
+                    </div>
+                </div>
+
+                <!-- Fifth Row -->
+
+                <div class="row flex">
+
+                    <div class="function-row">
+                        <button class="btn" type="button" value="tan"> e </button>
+                        <button class="btn" type="button" value="square"> x<sup>2</sup> </button>
+
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
     
