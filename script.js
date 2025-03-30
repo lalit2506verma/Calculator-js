@@ -51,27 +51,32 @@ let calculator_buttons = [
         symbol: "cos",
         formula: "trigo(Math.cos,",
         type: "trigo_function"
-    }, {
+    },
+    {
         name: "sin",
         symbol: "sin",
         formula: "trigo(Math.sin,",
         type: "trigo_function"
-    }, {
+    },
+    {
         name: "tan",
         symbol: "tan",
         formula: "trigo(Math.tan,",
         type: "trigo_function"
-    }, {
+    },
+    {
         name: "7",
         symbol: 7,
         formula: 7,
         type: "number"
-    }, {
+    },
+    {
         name: "8",
         symbol: 8,
         formula: 8,
         type: "number"
-    }, {
+    },
+    {
         name: "9",
         symbol: 9,
         formula: 9,
@@ -107,7 +112,6 @@ let calculator_buttons = [
         formula: "*",
         type: "operator"
     },
-
     {
         name: "exp",
         symbol: "exp",
@@ -197,6 +201,18 @@ let calculator_buttons = [
         symbol: "×!",
         formula: FACTORIAL,
         type: "math_function"
+    },
+    {
+        name: "e",
+        symbol: "e",
+        formula: "Math.E",
+        type: "number"
+    },
+    {
+        name: "ln",
+        symbol: "ln",
+        formula: "Math.log",
+        type: "math_function"
     }
 ];
 
@@ -237,42 +253,84 @@ function calculate(button) {
     console.log(button);
 
     if (button.type == "operator") {  // +, -, /, *
+
         data.operations.push(button.symbol);
         data.formula.push(button.formula);
+
     }
     else if (button.type == "number") {  // 1 2 3 4 5 6 7 8 9
+
         data.operations.push(button.symbol);
         data.formula.push(button.formula);
+
     }
     else if (button.type == "math_function") {  // factorial, Power, log
-        data.operations.push(button.symbol);
-        data.formula.push(button.formula);
+
+        let symbol, formula;
+        if (button.name == "factorial") {
+
+            symbol = "!";
+            formula = button.formula;
+
+        }
+        else if (button.name == "power") {
+            console.log("Math");
+
+            symbol = "^(";
+            formula = button.formula;
+
+        }
+        else if (button.name = "square") {
+
+            symbol = "^(2)";
+            formula = button.formula + "2)";
+        }
+        else {
+
+            symbol = button.symbol + "(";
+            formula = button.symbol + "(";
+
+        }
+
+        data.operations.push(symbol);
+        data.formula.push(formula);
+
     }
     else if (button.type == "trigo_function") {  // sin, cos, tan
-        data.operations.push(button.symbol);
+
+        data.operations.push(button.symbol + "(");
         data.formula.push(button.formula);
+
     }
     else if (button.type == "key") {
+
         // clear equation
         if (button.name == "clear") {
             data.operations = [];
             data.formula = [];
+
+            updateOutputResult(0);
+            updateOutputOperation(0);
         }
         else if (button.name == "delete") {
             data.operations.pop();
             data.formula.pop();
         }
+
     }
     else if (button.type == "calculate") {
         // calculate final answer
         formula_str = data.formula.join('');
+
+        console.log(formula_str);
+
 
         let result = eval(formula_str);
 
         //display equal sign
         const divText = document.querySelector('.equal-sign');
         divText.style.visibility = "visible";
-        divText.style.opacity = "1";
+        divText.style.opacity = "0.7";
 
         updateOutputResult(result);
 
@@ -288,7 +346,7 @@ function calculate(button) {
 
 // UPDATE OUTPUT
 function updateOutputOperation(operation) {
-    output_operation_element.value = operation;
+    output_operation_element.innerHTML = operation;
 }
 
 //  UPDATE RESULT
@@ -296,67 +354,11 @@ function updateOutputResult(result) {
     output_result_element.innerHTML = result;
 }
 
-
-// =======x===========x===========x==============x===========
-
-// let string = "";
-// let ans = 0;
-
-// // Select multiple button elements with the same class
-// const buttons = document.querySelectorAll('.btn');
-
-// // Convert NodeList to an array (optional, NodeList is iterable)
-// const buttonsArray = Array.from(buttons);
-
-// // Add event listener to each button
-// buttonsArray.forEach(button => {
-//     button.addEventListener('click', (event) => {
-
-//         console.log(event.target.value);
-
-//         let val = event.target.innerHTML;
-//         if (val == "ans") {
-//             if (string.startsWith("sqrt")) {
-//                 let num = string.substring(4);
-//                 string = findSquareRoot(num);
-//             }
-
-//             // display equal sign
-//             const divText = document.querySelector('.equal-sign');
-//             divText.style.visibility = "visible";
-//             divText.style.opacity = "1";
-
-//             // evaluate answer
-//             ans = eval(string);
-//         }
-//         else if (val == 'CE') {
-//             string = string.substr(0, string.length - 1);
-//         }
-//         else if (val == 'C') {
-//             string = "";
-//         }
-//         else {
-//             string = string + val;
-//         }
-
-//         document.querySelector('.input').value = string;
-//         document.querySelector('.answer').innerText = ans;
-//     });
-// });
-
-
 function findSquareRoot(num) {
     return Math.sqrt(num);
 }
 
-// function POWER(num) {
-//     return Math.pow(num, 2);
-// }
-
-// function FACTORIAL(nums) {
-//     if (nums == 1) {
-//         return;
-//     }
-
-//     return nums * FACTORIAL(nums - 1);
-// }
+// TRIGNOMETRIC FUNCTION
+function trigo(callback, angle){
+    
+}

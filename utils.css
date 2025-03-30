@@ -45,3 +45,8 @@
 .bg-black{
     background-color: black;
 }
+
+.angle-btn {
+    position: sticky;
+    right: 500px;
+}
