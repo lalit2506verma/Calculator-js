@@ -13,7 +13,7 @@ let calculator_buttons = [
     {
         name: "square",
         symbol: "x²",
-        formula: "POWER",
+        formula: POWER,
         type: "math_function"
     },
     {
@@ -209,10 +209,16 @@ let calculator_buttons = [
         type: "number"
     },
     {
-        name: "ln",
-        symbol: "ln",
-        formula: "Math.log",
-        type: "math_function"
+        name: "rad",
+        symbol: "Rad",
+        formula: false,
+        type: "key"
+    },
+    {
+        name: "deg",
+        symbol: "Deg",
+        formula: false,
+        type: "key"
     }
 ];
 
@@ -222,11 +228,26 @@ const input_element = document.querySelectorAll('.btn');
 const output_operation_element = document.querySelector('.input');
 const output_result_element = document.querySelector('.answer');
 
-
-
 let data = {
     operations: [],
     formula: []
+}
+
+// ANSWER fOR FUTURE USE
+let ans;
+
+// RAD and DEG
+let RADIAN = true;
+
+
+const rad_btn = document.getElementById("rad");
+const deg_btn = document.getElementById("deg");
+
+rad_btn.classList.add("active-angle");
+
+function angleToggle() {
+    rad_btn.classList.toggle("active-angle");
+    deg_btn.classList.toggle("active-angle");
 }
 
 const buttonsArray = Array.from(input_element);
@@ -316,21 +337,60 @@ function calculate(button) {
             data.operations.pop();
             data.formula.pop();
         }
+        else if (button.name == "rad") {
+            RADIAN = true;
+            angleToggle();
+        }
+        else if (button.name == "deg") {
+            RADIAN = false;
+            angleToggle();
+        }
 
     }
     else if (button.type == "calculate") {
         // calculate final answer
         formula_str = data.formula.join('');
 
-        console.log(formula_str);
+        console.log("formula" + formula_str);
+
+        // FIXING FACTORIAL AND POWER ISSUE
+        /* Math - 5!  data. operation - 5FACTORIAL  */
+
+        let power_search_result = search(data.formula, POWER);
+        let factorial_search_result = search(data.formula, FACTORIAL);
+        console.log(power_search_result, factorial_search_result);
+
+        // GET POWER BASE 
+        const powerBase = powerBaseGetter(data.formula, power_search_result);
+
+        powerBase.forEach(base => {
+            let toReplace = base + POWER;
+            let replacement = "Math.pow(" + base + ",";
+
+            formula_str = formula_str.replace(toReplace, replacement);
+        })
 
 
-        let result = eval(formula_str);
+        let result;
+        try {
+            result = eval(formula_str);
+        } catch (error) {
+            if (error instanceof SyntaxError) {
+                result = "Systex Error!"
+            }
+        }
 
         //display equal sign
         const divText = document.querySelector('.equal-sign');
         divText.style.visibility = "visible";
         divText.style.opacity = "0.7";
+
+        //Storing the ans
+        if (result != "Systex Error!") {
+            ans = result;
+            data.operations = [result];
+            data.formula = [result];
+        }
 
         updateOutputResult(result);
 
@@ -341,7 +401,54 @@ function calculate(button) {
     // updating the DOM element
     updateOutputOperation(data.operations.join(''));
 
+}
 
+// POWER BASE GETTER
+function powerBaseGetter(formula, power_search_result) {
+    let power_bases = [];
+
+    power_search_result.forEach(power_index => {
+        let base = [];
+
+        let parenthesisCount = 0;
+        let previous_index = power_index - 1;
+
+        while (previous_index >= 0) {
+
+            if (formula[previous_index] == "(") parenthesisCount--;
+            if (formula[previous_index] == ")") parenthesisCount++;
+
+            let is_operator = false;
+
+            OPERATORS.forEach(OPERATOR => {
+                if (formula[previous_index] == OPERATOR) is_operator = true;
+            })
+
+            let is_power = formula[previous_index] == POWER;
+
+            if ((is_operator && parenthesisCount == 0) || is_power) {
+                break;
+            }
+
+            base.unshift((formula[previous_index]))
+            previous_index--;
+        }
+
+        power_bases.push(base.join(''));
+    })
+
+    return power_bases;
+}
+
+// SEARCH FACTORIAL AND POWER FUNCTION IN FORMULA ARRAY
+function search(array, keyword) {
+    let search_result = [];
+
+    array.forEach((element, idx) => {
+        if (element == keyword) search_result.push(idx);
+    })
+
+    return search_result;
 }
 
 // UPDATE OUTPUT
@@ -359,6 +466,54 @@ function findSquareRoot(num) {
 }
 
 // TRIGNOMETRIC FUNCTION
-function trigo(callback, angle){
-    
+function trigo(callback, angle) {
+    if (!RADIAN) {
+
+        angle = angle * Math.PI / 100;
+
+    }
+    return callback(angle);
+}
+
+// FACTORIAL
+function factorial(number) {
+
+    if (number % 1 != number) {
+        return gamma(number);
+    }
+
+    if (number === 0 || number === 1) {
+        return 1;
+    }
+
+    let res = 1;
+
+    for (let i = 1; i <= number; i++) {
+
+        res *= i;
+        if (res === Infinity) {
+            return Infinity;
+        }
+
+    }
+    return res;
+}
+
+// GAMMA FUNCTINON
+function gamma(n) {  // accurate to about 15 decimal places
+    //some magic constants 
+    var g = 7, // g represents the precision desired, p is the values of p[i] to plug into Lanczos' formula
+        p = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+    if (n < 0.5) {
+        return Math.PI / Math.sin(n * Math.PI) / gamma(1 - n);
+    }
+    else {
+        n--;
+        var x = p[0];
+        for (var i = 1; i < g + 2; i++) {
+            x += p[i] / (n + i);
+        }
+        var t = n + g + 0.5;
+        return Math.sqrt(2 * Math.PI) * Math.pow(t, (n + 0.5)) * Math.exp(-t) * x;
+    }
 }

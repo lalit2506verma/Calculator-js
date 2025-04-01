@@ -46,7 +46,8 @@
     background-color: black;
 }
 
-.angle-btn {
-    position: sticky;
-    right: 500px;
+.active-angle {
+    background-color: rgb(76, 76, 76);
+    cursor: pointer;
+    color: white;
 }
