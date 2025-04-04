@@ -293,28 +293,38 @@ function calculate(button) {
             symbol = "!";
             formula = button.formula;
 
+            data.operations.push(symbol);
+            data.formula.push(formula);
+
         }
         else if (button.name == "power") {
-            console.log("Math");
 
             symbol = "^(";
             formula = button.formula;
 
-        }
-        else if (button.name = "square") {
+            data.operations.push(symbol);
+            data.formula.push(formula);
 
-            symbol = "^(2)";
-            formula = button.formula + "2)";
         }
-        else {
+        else if (button.name == "square") {
+
+            symbol = "^(";
+            formula = button.formula;
+
+            data.operations.push(symbol);
+            data.formula.push(formula);
+
+            data.operations.push("2)");
+            data.formula.push("2)");
+        }
+        else { // log, ln
 
             symbol = button.symbol + "(";
             formula = button.symbol + "(";
 
+            data.operations.push(symbol);
+            data.formula.push(formula);
         }
-
-        data.operations.push(symbol);
-        data.formula.push(formula);
 
     }
     else if (button.type == "trigo_function") {  // sin, cos, tan
@@ -350,6 +360,8 @@ function calculate(button) {
     else if (button.type == "calculate") {
         // calculate final answer
         formula_str = data.formula.join('');
+        console.log(data.formula);
+
 
         console.log("formula" + formula_str);
 
@@ -360,7 +372,7 @@ function calculate(button) {
         let factorial_search_result = search(data.formula, FACTORIAL);
         console.log(power_search_result, factorial_search_result);
 
-        // GET POWER BASE 
+        // GET POWER BASE AND REPLACE IT WITH RIGHT FORMULA
         const powerBase = powerBaseGetter(data.formula, power_search_result);
 
         powerBase.forEach(base => {
@@ -370,6 +382,14 @@ function calculate(button) {
             formula_str = formula_str.replace(toReplace, replacement);
         })
 
+        // GET THE FACTORIAL NUMBER AND REPLACE IT WITH RIGHT FORMULA
+        const factoral_num = factorialNumberGetter(data.formula, factorial_search_result);
+
+        factoral_num.forEach(factorial => {
+            formula_str = formula_str.replace(factorial.toReplace, factorial.replacement);
+        })
+
+        console.log(formula_str);
 
         let result;
         try {
@@ -394,6 +414,7 @@ function calculate(button) {
 
         updateOutputResult(result);
 
+        return;
     }
 
     console.log(data.operations.join(''));
@@ -440,6 +461,69 @@ function powerBaseGetter(formula, power_search_result) {
     return power_bases;
 }
 
+// FACTORIAL GETTER FUNCTION
+function factorialNumberGetter(formula, factorial_search_result) {
+    let factorial_num = [];
+    let factorial_seq = 0;
+
+    factorial_search_result.forEach(fact_idx => {
+        let number = [];
+
+        let next_index = fact_idx + 1;
+        let next_input = formula[next_index];
+
+        if (next_index == FACTORIAL) {
+            factorial_seq++;
+            return;
+        }
+
+        // IF THERE WAS A FACTORIAL SEQUENCE, WE NEED TO GET
+        // A NUMBER OF THE VERY FIRST FACTORIAL FUNCTION
+        let first_factorial_idx = fact_idx - factorial_seq;
+
+        //THEN TO GET THE NUMBER RIGHT BEFOR IT
+        let prev_index = first_factorial_idx - 1;
+        let paranthesis = 0;
+
+        while (prev_index >= 0) {
+            if (formula[prev_index] == "(") paranthesis--;
+            if (formula[prev_index] == ")") paranthesis++;
+
+            let is_operator = false;
+
+            OPERATORS.forEach(OPERATOR => {
+                if (formula[prev_index] == OPERATOR) is_operator = true;
+            })
+
+            if ((is_operator && paranthesis == 0)) {
+                break;
+            }
+
+            number.unshift((formula[prev_index]))
+            prev_index--;
+        }
+
+        let number_str = number.join('');
+        const factorial = "factorial(", close_parenthesis = ")";
+        let times = factorial_seq + 1;
+
+        let toReplace = number_str + FACTORIAL.repeat(times);
+        let replacement = factorial.repeat(times) + number_str + close_parenthesis.repeat(times);
+
+        factorial_num.push({
+            toReplace: toReplace,
+            replacement: replacement
+        })
+
+        // REST FACTORIAL SEQUENCE
+        factorial_seq = 0;
+
+    })
+
+    return factorial_num;
+}
+
+
 // SEARCH FACTORIAL AND POWER FUNCTION IN FORMULA ARRAY
 function search(array, keyword) {
     let search_result = [];
@@ -478,7 +562,7 @@ function trigo(callback, angle) {
 // FACTORIAL
 function factorial(number) {
 
-    if (number % 1 != number) {
+    if (number % 1 != 0) {
         return gamma(number);
     }
 
